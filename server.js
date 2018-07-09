@@ -1,9 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const db = require("./config/keys").mongoURI;
-//import express from "express";
-//import mongoose from "mongoose";
-//import { mongoURI } from "./config/keys";
+const users = require("./routes/api/users");
+const profile = require("./routes/api/profile");
+const posts = require("./routes/api/posts");
 
 const app = express();
 
@@ -14,6 +14,11 @@ mongoose
   .catch(() => console.log("Mongo failed to connect"));
 
 app.get("/", (req, res) => res.send("Hello world"));
+
+//Use Routes
+app.use("/api/users", users);
+app.use("/api/profile", profile);
+app.use("/api/posts", posts);
 
 const port = process.env.PORT || 5000;
 
