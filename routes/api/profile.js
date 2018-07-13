@@ -4,6 +4,8 @@ const passport = require("passport");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 const validateProfileInput = require("../../validation/profile");
+const validateExperienceInput = require("../../validation/experience");
+const validateEducationInput = require("../../validation/education");
 const router = express.Router();
 
 // @route   GET api/profile/test
@@ -140,6 +142,129 @@ router.post(
         }
       })
       .catch(err => {});
+  }
+);
+
+// @route   POST api/profile/experience
+// @desc    Add experience to profile
+// @access  Private
+router.post(
+  "/experience",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //validation
+    const { errors, isValid } = validateExperienceInput(req.body);
+    if (!isValid) return res.status(400).json(errors);
+    //Find profile
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      const newExp = {
+        title: req.body.title,
+        company: req.body.company,
+        location: req.body.location,
+        from: req.body.from,
+        to: req.body.to,
+        current: req.body.current,
+        description: req.body.description
+      };
+      //add to experience array
+      profile.experience.unshift(newExp);
+      profile
+        .save()
+        .then(profile => res.json(profile))
+        .catch(err => res.json(err));
+    });
+  }
+);
+
+// @route   POST api/profile/education
+// @desc    Add education to profile
+// @access  Private
+router.post(
+  "/education",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //validation
+    const { errors, isValid } = validateEducationInput(req.body);
+    if (!isValid) return res.status(400).json(errors);
+    //Find profile
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      const newEducation = {
+        school: req.body.school,
+        degree: req.body.degree,
+        fieldofstudy: req.body.fieldofstudy,
+        from: req.body.from,
+        to: req.body.to,
+        current: req.body.current,
+        description: req.body.description
+      };
+      //add to experience array
+      profile.education.unshift(newEducation);
+      profile
+        .save()
+        .then(profile => res.json(profile))
+        .catch(err => res.json(err));
+    });
+  }
+);
+
+// @route   DELETE api/profile/experience/:exp_id
+// @desc    Delete experience from profile
+// @access  Private
+router.delete(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //Find profile
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      //Get remove index
+      const removeIndex = profile.experience
+        .map(item => item.id)
+        .indexOf(req.params.exp_id);
+      //Splice out of the array
+      profile.experience.splice(removeIndex, 1);
+      profile
+        .save()
+        .then(profile => res.json(profile))
+        .catch(err => res.status(404).json(err));
+    });
+  }
+);
+
+// @route   DELETE api/profile/education/:edu_id
+// @desc    Delete education from profile
+// @access  Private
+router.delete(
+  "/education/:edu_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //Find profile
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      //Get remove index
+      const removeIndex = profile.education
+        .map(item => item.id)
+        .indexOf(req.params.edu_id);
+      //Splice out of the array
+      profile.education.splice(removeIndex, 1);
+      profile
+        .save()
+        .then(profile => res.json(profile))
+        .catch(err => res.status(404).json(err));
+    });
+  }
+);
+
+// @route   DELETE api/profile/
+// @desc    Delete user and profile
+// @access  Private
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOneAndRemove({ user: req.user.id }).then(() =>
+      User.findOneAndRemove({ _id: req.user.id }).then(() =>
+        res.json({ success: true })
+      )
+    );
   }
 );
 
