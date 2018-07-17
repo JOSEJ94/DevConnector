@@ -1,4 +1,4 @@
-# About DevConnect Project
+# About DevConnector Project
 
 This project is being made based on the course [MERN Stack Front To Back: Full Stack React, Redux & Node.js](https://www.udemy.com/mern-stack-front-to-back/) by **Brad Traversy**.
 
@@ -20,7 +20,7 @@ There are just a few steps to get this project working.
 - Install the dependencies for the client:
 `npm run client-install`
 
-Now the you have dependencies installed you will need to create the connection string for your mongoDB and secret key for your JWT Authentication Service. In order to do this, you will have to create a new carpet called **config** inside your **server** directory, and next create a new file called **keys.js**. The content of this file must be similar to the following:
+Now the you have dependencies installed you will need to create the connection string for your mongoDB and secret key for your JWT Authentication Service. In order to do this, you will have to create a new folder called **config** inside your **server** folder, and next create a new file called **keys.js**. The content of this file must be similar to the following:
 
 `module.exports  = {
 mongoURI:  [Your mongoDB connection URI],
