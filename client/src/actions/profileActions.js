@@ -24,3 +24,15 @@ export const SetProfileLoading = () => {
 export const ClearCurrentProfile = () => {
   return { type: CLEAR_CURRENT_PROFILE };
 };
+
+//Create Profile
+export const CreateProfile = (profileData, history) => dispatch => {
+  axios
+    .post("/api/profile", profileData)
+    .then(res => {
+      history.push("/dashboard");
+    })
+    .catch(err => {
+      dispatch({ type: GET_ERRORS, payload: err.response.data });
+    });
+};
