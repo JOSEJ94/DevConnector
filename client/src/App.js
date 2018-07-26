@@ -15,6 +15,9 @@ import CreateProfile from "./components/create-profile/CreateProfile";
 import { Provider } from "react-redux";
 import store from "./store";
 import PrivateRoute from "./components/common/PrivateRoute";
+import EditProfile from "./components/edit-profile/EditProfile";
+import AddExperience from "./components/add-credentials/AddExperience";
+import AddEducation from "./components/add-credentials/AddEducation";
 
 //check for token
 if (localStorage.jwtToken) {
@@ -53,6 +56,27 @@ class App extends Component {
                   exact
                   path="/create-profile"
                   component={CreateProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/edit-profile"
+                  component={EditProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/add-experience"
+                  component={AddExperience}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/add-education"
+                  component={AddEducation}
                 />
               </Switch>
             </div>
