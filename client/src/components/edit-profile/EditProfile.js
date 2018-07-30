@@ -9,7 +9,7 @@ import {
   CreateProfile as createProfile,
   GetCurrentProfile
 } from "../../actions/profileActions";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import IsEmpty from "../../validation/is_empty";
 
 class EditProfile extends Component {
@@ -171,6 +171,9 @@ class EditProfile extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
+              <Link to="/dashboard" className="btn btn-light">
+                Go Back
+              </Link>
               <h4 className="display-4 text-center">Edit your profile</h4>
               <small className="d-block pb-3">* = required fields</small>
               <form onSubmit={this.onSubmit}>
