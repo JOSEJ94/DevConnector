@@ -6,7 +6,9 @@ const User = require("../../models/User");
 const validateProfileInput = require("../../validation/profile");
 const validateExperienceInput = require("../../validation/experience");
 const validateEducationInput = require("../../validation/education");
+const Keys = require("../../config/keys");
 const router = express.Router();
+const fetch = require("node-fetch");
 
 // @route   GET api/profile/test
 // @desc    Tests profile router
@@ -65,6 +67,30 @@ router.get("/user/:user_id", (req, res) => {
       }
       res.json(profile);
     })
+    .catch(err => res.status(404).json(err));
+});
+
+// @route   GET api/profile/github/:user_id
+// @desc    Get profile by user ID
+// @access  Public
+router.get("/github/:user_id", (req, res) => {
+  const errors = {};
+  const count = 5;
+  const sort = "created:asc";
+  fetch(
+    "https://api.github.com/users/" +
+      req.params.user_id +
+      "/repos?per_page=" +
+      count +
+      "&sort=" +
+      sort +
+      "&client_id=" +
+      Keys.github_clientId +
+      "&client_secret=" +
+      Keys.github_clientSecret
+  )
+    .then(response => response.json())
+    .then(data => res.json(data))
     .catch(err => res.status(404).json(err));
 });
 
